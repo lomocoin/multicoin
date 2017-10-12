@@ -119,10 +119,13 @@ int wl_secp_verify_signature(void *pubkey,int compress,void *md32,void *sig,size
     if (_ctx != NULL && pubkey != NULL && md32 != NULL && sig != NULL)
     {
         if (secp256k1_ec_pubkey_parse(_ctx, &pk, pubkey,(compress ? 33 : 65))
-            && secp256k1_ecdsa_signature_parse_der(_ctx, &s, sig, len)
-            && secp256k1_ecdsa_verify(_ctx,&s,md32,&pk) == 1)
+            && secp256k1_ecdsa_signature_parse_der(_ctx, &s, sig, len))
         {
-            return 0;
+            secp256k1_ecdsa_signature_normalize(_ctx,&s,&s);
+            if (secp256k1_ecdsa_verify(_ctx,&s,md32,&pk) == 1)
+            {
+                return 0;
+            }
         }
     }
     return -1;
