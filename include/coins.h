@@ -13,6 +13,7 @@ typedef enum
 {
     WALLEVE_COINS_LMC=0,
     WALLEVE_COINS_BTC=1,
+    WALLEVE_COINS_ETH=2,
     WALLEVE_COINS_COUNT
 }coin_t;
 

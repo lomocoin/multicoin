@@ -9,6 +9,7 @@
 #include "multicoin.h"
 
 int lmc_test();
+int eth_test();
 
 void disp_str(char *s)
 {
@@ -54,6 +55,16 @@ void disp_json(const char *json_str)
         }
         ++p;
     }
+}
+
+void disp_ver()
+{
+    vch_t *ver = wl_vch_new();
+    if (wl_multicoin_version(ver) == 0)
+    {
+        printf("v%s\n",wl_vch_string(ver));
+    }
+    wl_vch_free(ver);
 }
 
 int createkey(coin_t coin)
@@ -189,10 +200,15 @@ int main(int argc,char **argv)
 {
     wl_multicoin_init();
 
+    disp_ver();
+   
     if (!lmc_test())
     {
     }
 
+    if (!eth_test())
+    {
+    }
     wl_multicoin_deinit();
     return 0;
 }

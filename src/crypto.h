@@ -24,5 +24,8 @@ int wl_secp_verify_signature(void *pubkey,int compress,void *md32,void *sig,size
 
 void wl_hash256d(const void *data,size_t size,void *md32);
 void wl_hash160(const void *data,size_t size,void *md20);
+void wl_hashsha3(const void *data,size_t size,void *md32);
+
+void wl_right160(const void *md32,void *md20);
 
 #endif //WALLEVE_CRYPTO_H

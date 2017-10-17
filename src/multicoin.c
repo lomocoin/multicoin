@@ -3,6 +3,7 @@
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include "multicoin.h"
+#include "version.h"
 #include "crypto.h"
 #include "key.h"
 #include "script.h"
@@ -21,6 +22,17 @@ void wl_multicoin_deinit(void)
     wl_script_clear();
     wl_key_clear();
     wl_crypto_deinit();
+}
+
+int wl_multicoin_version(vch_t *ver)
+{
+    if (ver != NULL)
+    {
+        wl_vch_clear(ver);
+        return wl_vch_push_sprintf(ver,WL_VERSION_FMT,WL_MULTICOIN_MAJOR,
+                                                      WL_MULTICOIN_MINOR);
+    }
+    return -1;
 }
 
 int wl_multicoin_key_create(coin_t coin,vch_t *addr)

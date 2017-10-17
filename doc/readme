@@ -34,6 +34,7 @@ typedef enum
 {
     WALLEVE_COINS_LMC=0,
     WALLEVE_COINS_BTC=1,
+    WALLEVE_COINS_ETH=2,
 }coin_t;
 
 typedef struct
@@ -57,6 +58,9 @@ void wl_multicoin_deinit(void);
 
 // Create new key & return relvant address
 int wl_multicoin_key_create(coin_t coin,vch_t *addr);
+
+// Retrieve current version
+int wl_multicoin_version(vch_t *ver);
 
 // Import private key & return relvant address
 int wl_multicoin_key_import(coin_t coin,const char *privkey,vch_t *addr);

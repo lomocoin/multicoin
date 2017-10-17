@@ -17,6 +17,7 @@ TESTTARGET = mctest
 OBJ = 	\
       src/rmd160.o	\
       src/base58.o	\
+      src/sha3.o	\
       src/crypto.o	\
       src/vch.o		\
       src/buff.o	\
@@ -28,8 +29,9 @@ OBJ = 	\
       src/sato.o	\
       src/lmc.o		\
       src/btc.o		\
+      src/eth.o		\
       src/multicoin.o	
-TESTOBJ = $(OBJ) src/test.o src/bench_lmc.o
+TESTOBJ = $(OBJ) src/test.o src/bench_lmc.o src/bench_eth.o
 TESTNET:= 0
 CFLAGS += -DTESTNET=$(TESTNET)
 

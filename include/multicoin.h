@@ -19,6 +19,9 @@ int wl_multicoin_init(void);
 // Release resource for multicoin library
 void wl_multicoin_deinit(void);
 
+// Retrieve current version
+int wl_multicoin_version(vch_t *ver);
+
 /* Key */
 
 // Create new key & return relvant address

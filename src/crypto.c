@@ -171,3 +171,15 @@ void wl_hash160(const void *data,size_t size,void *md20)
     wl_hash_sha256(data,size,hash);
     wl_hash_rmd160(hash,32,md20);
 }
+
+#include "sha3.h"
+
+void wl_hashsha3(const void *data,size_t size,void *md32)
+{
+    sha3_256(md32,32,data,size); 
+}
+
+void wl_right160(const void *md32,void *md20)
+{
+    memcpy(md20,((uint8_t*)md32) + 12,20);
+}
