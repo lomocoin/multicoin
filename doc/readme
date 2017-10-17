@@ -1,11 +1,15 @@
-Mulitcoin library 0.1
+Mulitcoin library 0.01
 
 Copyright (c) 2017-2019 LoMoCoin Developers
 Distributed under the MIT/X11 software license, see the accompanying
 file license.txt or http://www.opensource.org/licenses/mit-license.php.
-This product includes software developed by the OpenSSL Project for use in
-the OpenSSL Toolkit (http://www.openssl.org/).  This product includes
-cryptographic software written by Eric Young (eay@cryptsoft.com).
+This product includes software developed by the bitcoin-core Project 
+for use in the libsecp256k1 (https://github.com/bitcoin-core/secp256k1).  
+This product includes libkeccak-tiny (CC0) written by David Leon Gil 
+(https://github.com/coruus/keccak-tiny).
+This product includes RIPEMD-160 written by Antoon Bosselaers, 
+ESAT-COSIC (http://homes.esat.kuleuven.be/~bosselae/ripemd160.html)
+
 
 
 1. build
