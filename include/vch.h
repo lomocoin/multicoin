@@ -52,6 +52,9 @@ int wl_vch_push_uchar(vch_t *vch,const uint8_t u);
 // Append format string
 int wl_vch_push_sprintf(vch_t *vch,const char *fmt,...);
 
+// Append data from hex string
+int wl_vch_push_fromhex(vch_t *vch,const char *hex);
+
 // Append hex string from specified data
 int wl_vch_push_hex(vch_t *vch,const uint8_t *bytes,size_t size);
 

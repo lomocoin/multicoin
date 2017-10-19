@@ -107,7 +107,7 @@ int wl_multicoin_script_export(coin_t coin,const char *addr,vch_t *script)
 
 int wl_multicoin_tx_parse(coin_t coin,const char *tx_data,const char *tx_ctxt,vch_t *tx_json)
 {
-    if (tx_data == NULL || tx_ctxt == NULL || tx_json == NULL)
+    if (tx_data == NULL || tx_json == NULL)
     {
         return -1;
     }
@@ -116,7 +116,7 @@ int wl_multicoin_tx_parse(coin_t coin,const char *tx_data,const char *tx_ctxt,vc
 
 int wl_multicoin_tx_sign(coin_t coin,const char *tx_data,const char *tx_ctxt,vch_t *tx_signed)
 {
-    if (tx_data == NULL || tx_ctxt == NULL || tx_signed == NULL)
+    if (tx_data == NULL || tx_signed == NULL)
     {
         return -1;
     }
@@ -125,7 +125,7 @@ int wl_multicoin_tx_sign(coin_t coin,const char *tx_data,const char *tx_ctxt,vch
 
 int wl_multicoin_tx_verify(coin_t coin,const char *tx_data,const char *tx_ctxt,vch_t *ret_json)
 {
-    if (tx_data == NULL || tx_ctxt == NULL || ret_json == NULL)
+    if (tx_data == NULL || ret_json == NULL)
     {
         return -1;
     }

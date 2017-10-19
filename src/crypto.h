@@ -21,6 +21,8 @@ int wl_secp_verify_secret(void *secret);
 int wl_secp_get_pubkey(void *secret,int compress,vch_t *pubkey);
 int wl_secp_sign_signature(void *secret,const void *md32,vch_t *sig);
 int wl_secp_verify_signature(void *pubkey,int compress,void *md32,void *sig,size_t len);
+int wl_secp_eth_sign_signature(void *secret,const void *md32,vch_t *sig);
+int wl_secp_eth_recover_pubkey(void *sig65,void *md32,vch_t *pubkey);
 
 void wl_hash256d(const void *data,size_t size,void *md32);
 void wl_hash160(const void *data,size_t size,void *md20);

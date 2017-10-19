@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include "crypto.h"
+#include "biguint.h"
 
 #if __BIG_ENDIAN__ || (defined(__BYTE_ORDER__) && __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__) ||\
     __ARMEB__ || __THUMBEB__ || __AARCH64EB__ || __MIPSEB__
@@ -29,11 +30,14 @@
 
 
 static secp256k1_context *_ctx = NULL;
+static uint256_t _secp256k1n,_secp256k1n_rs;
 
 void wl_crypto_init()
 {
     _ctx = secp256k1_context_create(SECP256K1_CONTEXT_SIGN | SECP256K1_CONTEXT_VERIFY);
     srandom(time(NULL));
+    wl_uint256_fromhex(&_secp256k1n,"115792089237316195423570985008687907852837564279074904382605163141518161494337");
+    _secp256k1n_rs = wl_uint256_rshift(_secp256k1n);
 }
 
 void wl_crypto_deinit()
@@ -129,6 +133,58 @@ int wl_secp_verify_signature(void *pubkey,int compress,void *md32,void *sig,size
         }
     }
     return -1;
+}
+
+int wl_secp_eth_sign_signature(void *secret,const void *md32,vch_t *sig)
+{
+    int v = 0;
+    uint256_t u;
+
+    secp256k1_ecdsa_recoverable_signature s;
+    if (!secp256k1_ecdsa_sign_recoverable(_ctx,&s,md32,secret,NULL,NULL))
+    {
+        return -1;
+    }
+    if (wl_vch_resize(sig,64) < 0)
+    {
+        return -1;
+    }
+    secp256k1_ecdsa_recoverable_signature_serialize_compact(_ctx,wl_vch_data(sig),&v,&s);
+
+    u = ((uint256_t *)wl_vch_data(sig))[1];
+    if (wl_uint256_compare(u,_secp256k1n_rs) > 0)
+    {
+        ((uint256_t *)wl_vch_data(sig))[1] = wl_uint256_minus(_secp256k1n,u);
+        v ^= 1;
+    }
+    return wl_vch_push_uchar(sig,v);
+}
+
+int wl_secp_eth_recover_pubkey(void *sig65,void *md32,vch_t *pubkey)
+{
+    size_t len = 65;
+    int v = ((uint8_t *)sig65)[64];
+    if (v > 3) 
+    {
+        return -1;
+    }
+    secp256k1_ecdsa_recoverable_signature sig;
+    if (!secp256k1_ecdsa_recoverable_signature_parse_compact(_ctx, &sig,sig65, v))
+    {
+        return -1;
+    }
+    secp256k1_pubkey pk;
+    if (!secp256k1_ecdsa_recover(_ctx,&pk,&sig,md32))
+    {
+        return -1;
+    }
+    
+    if (wl_vch_resize(pubkey,len) < 0)
+    {
+        return -1;
+    }
+    secp256k1_ec_pubkey_serialize(_ctx,wl_vch_data(pubkey),&len,&pk,SECP256K1_EC_UNCOMPRESSED);
+    return (len == 65 ? 0 : -1);
 }
 
 #include "rmd160.h"

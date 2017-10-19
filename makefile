@@ -15,12 +15,14 @@ LDFLAGS = -lrt -lm -lpthread
 TARGET = libmulticoin.la
 TESTTARGET = mctest
 OBJ = 	\
+      src/biguint.o	\
       src/rmd160.o	\
       src/base58.o	\
       src/sha3.o	\
       src/crypto.o	\
       src/vch.o		\
       src/buff.o	\
+      src/rlp.o	\
       src/json.o	\
       src/coins.o	\
       src/key.o		\

@@ -6,7 +6,7 @@
 #define  WALLEVE_VERSION_H
 
 #define WL_MULTICOIN_MAJOR		0
-#define WL_MULTICOIN_MINOR		1
+#define WL_MULTICOIN_MINOR		2
 
 #define WL_VERSION_FMT			"%d.%2.2d"
 

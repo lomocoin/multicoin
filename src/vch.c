@@ -58,7 +58,7 @@ vch_t *wl_vch_new_str(const char *str)
 vch_t *wl_vch_new_hex(const char *hex)
 {
     size_t len = strlen(hex) / 2;
-    vch_t *vch = wl_vch_alloc(len + 1);;
+    vch_t *vch = wl_vch_alloc(len + 1);
     if (vch != NULL)
     {
         int h,l;
@@ -188,6 +188,23 @@ int wl_vch_push_sprintf(vch_t *vch,const char *fmt,...)
     vsnprintf((char *)vch->ptr + vch->len, len + 1, fmt, ap);
     va_end(ap);
     vch->len += len;
+    return 0;
+}
+
+int wl_vch_push_fromhex(vch_t *vch,const char *hex)
+{
+    int h,l;
+    size_t len = strlen(hex) / 2;
+    wl_vch_reserve(vch,vch->len + len);
+    while (*hex != '\0')
+    {
+        if ((h = wl_hex_to_int(*hex++)) < 0 
+            || (l = wl_hex_to_int(*hex++)) < 0
+            || wl_vch_push_uchar(vch,(h << 4) | l) < 0)
+        {
+            return -1;
+        }
+    }
     return 0;
 }
 

@@ -197,7 +197,9 @@ int wl_key_sign(coin_t coin,const char *addr,const uint8_t *md32,vch_t *sig)
     struct wl_key_list *p = wl_key_find_list(coin,addr);
     if (p != NULL)
     {
-        return wl_secp_sign_signature(p->secret,md32,sig);
+        return (coin != WALLEVE_COINS_ETH ? 
+                wl_secp_sign_signature(p->secret,md32,sig) 
+               : wl_secp_eth_sign_signature(p->secret,md32,sig));
     }
     return -1;
 }

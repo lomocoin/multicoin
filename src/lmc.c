@@ -3,6 +3,7 @@
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include "lmc.h"
+#include "biguint.h"
 #include "buff.h"
 #include "json.h"
 #include "key.h"
@@ -87,6 +88,7 @@ int wl_lmc_set_priv(const char *privkey,uint8_t *secret)
 }
 
 /* script funcionts */
+
 static int wl_lmc_script_push_pubkey(vch_t *script,const char *pubkey)
 {
     int ret = -1;
@@ -630,7 +632,7 @@ static inline int wl_lmc_tx_fromhex(const char *tx_data,const char *tx_ctxt,stru
 {
     buff_t buf;
     int ret = -1;
-    if (wl_buff_init_hex(&buf,tx_data) == 0)
+    if (wl_buff_init_hex(&buf,tx_data) == 0 && tx_ctxt != NULL)
     {
         ret = wl_lmc_tx_unserialize(&buf,tx_ctxt,tx);
     }

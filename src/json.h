@@ -76,6 +76,11 @@ inline double wl_json_get_double(json_t *json)
              (json->type == WL_JSON_INTEGER ? (double)json->value.i : 0.0));
 }
 
+inline int wl_json_is_null(json_t *json)
+{
+    return (json->type == WL_JSON_NULL);
+}
+
 inline int wl_json_is_boolean(json_t *json)
 {
     return (json->type == WL_JSON_BOOLEAN);

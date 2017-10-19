@@ -17,22 +17,6 @@ typedef enum
     WALLEVE_COINS_COUNT
 }coin_t;
 
-typedef union
-{
-    uint8_t u8[160/8];
-    uint8_t u32[160/32];
-}uint160_t;
-
-typedef union
-{
-    uint8_t u8[256/8];
-    uint8_t u32[256/32];
-    uint64_t u64[256/64];
-}uint256_t;
-
-#define UINT160_ZERO ((uint160_t) { .u32 = { 0, 0, 0, 0, 0 } })
-#define UINT256_ZERO ((uint256_t) { .u64 = { 0, 0, 0, 0 } })
-
 struct wl_coin_operation
 {
     int (*is_compressed)();

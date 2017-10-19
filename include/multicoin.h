@@ -42,8 +42,11 @@ int wl_multicoin_key_pubkey(coin_t coin,const char *addr,vch_t *pubkey);
 /* Script/Contract */
 
 // Add script dependent on context,return relvant address
-// LMC/BTC:
-// 
+// LMC/BTC multisig: {"type":"multisig",
+//                    "param":{"req":req count,
+//                             "pubkeys":["pubkey1 hex","pubkey2 hex"..]}}
+// LMC coldminting : {"type":"coldminting",
+//                    "param":{"mint":mint address,"spent":spent address}}
 int wl_multicoin_script_addnew(coin_t coin,const char *context,vch_t *addr);
 
 // Remove script corresponding to address 
@@ -60,6 +63,15 @@ int wl_multicoin_script_export(coin_t coin,const char *addr,vch_t *script);
 //   tx_ctxt : json array of scriptpubkey for each txin 
 //           : ["script_pubkey_vin[0]","script_pubkey_vin[1]",...]
 //   tx_json : tx in json
+// ETH:
+//   tx_data : json object, serialized tx data or tx feilds
+//           : serialized data : {"hex":hex string}
+//           : tx feilds :{"nonce":hex string,"gas":hex string,"price":hex string,
+//                         "data":hex string,"to":hex string,"value":hex string,
+//                         "r":hex string,"s":hex string,"v":hex string}
+//                         "r"/"s"/"v" are optional, "v" is encoded with chainid
+//   tx_ctxt : json object with address : {"from":hex string} 
+//   tx_json : tx in json
 int wl_multicoin_tx_parse(coin_t coin,const char *tx_data,const char *tx_ctxt,vch_t *tx_json);
 
 // Sign transaction, return transaction data with signature
@@ -68,6 +80,15 @@ int wl_multicoin_tx_parse(coin_t coin,const char *tx_data,const char *tx_ctxt,vc
 //   tx_ctxt : json array of scriptpubkey for each txin 
 //           : ["script_pubkey_vin[0]","script_pubkey_vin[1]",...]
 //   tx_signed : serialized tx data with signature (if have key)
+// ETH:
+//   tx_data : json object, serialized tx data or tx feilds
+//           : serialized data : {"hex":hex string}
+//           : tx feilds :{"nonce":hex string,"gas":hex string,"price":hex string,
+//                         "data":hex string,"to":hex string,"value":hex string,
+//                         "r":hex string,"s":hex string,"v":hex string}
+//                         "r"/"s"/"v" are optional, "v" is encoded with chainid
+//   tx_ctxt : json object with address : {"from":hex string} 
+//   tx_signed : serialized tx data with signature (if have key)
 int wl_multicoin_tx_sign(coin_t coin,const char *tx_data,const char *tx_ctxt,vch_t *tx_signed);
 
 // Verify each signature for transacion input, return verification in json
@@ -75,6 +96,15 @@ int wl_multicoin_tx_sign(coin_t coin,const char *tx_data,const char *tx_ctxt,vch
 //   tx_data : serialized tx data
 //   tx_ctxt : json array of scriptpubkey for each txin 
 //           : ["script_pubkey_vin[0]","script_pubkey_vin[1]",...]
+//   ret_json : result in json
+// ETH:
+//   tx_data : json object, serialized tx data or tx feilds
+//           : serialized data : {"hex":hex string}
+//           : tx feilds :{"nonce":hex string,"gas":hex string,"price":hex string,
+//                         "data":hex string,"to":hex string,"value":hex string,
+//                         "r":hex string,"s":hex string,"v":hex string}
+//                         "r"/"s"/"v" are optional, "v" is encoded with chainid
+//   tx_ctxt : json object with address : {"from":hex string} 
 //   ret_json : result in json
 int wl_multicoin_tx_verify(coin_t coin,const char *tx_data,const char *tx_ctxt,vch_t *ret_json);
 

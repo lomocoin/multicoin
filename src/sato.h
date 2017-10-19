@@ -7,7 +7,7 @@
 
 #include <stdlib.h>
 #include <stdint.h>
-#include "coins.h"
+#include "biguint.h"
 #include "vch.h"
 
 #define SIGHASH_ALL             1
