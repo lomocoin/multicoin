@@ -154,17 +154,27 @@ static int wl_eth_tx_unserialize(vch_t *vch,struct eth_transaction *tx)
         return -1;
     }
     tx->chainid = -4;
-    if (count == 9)
+    if (count > 6)
     {
         uint64_t v;
-        if (   wl_rlp_get_uint(&rlp[6],&v) < 0 || v > 0xff 
-            || wl_rlp_get_biguint(&rlp[7],tx->r.u8,32) < 0
-            || wl_rlp_get_biguint(&rlp[8],tx->s.u8,32) < 0
-            || wl_eth_tx_parse_chainid(tx,v) < 0)
+        if (wl_rlp_get_uint(&rlp[6],&v) < 0 || v > 0xff)
+        {
+            return -1;
+        }
+        if (count == 9)
+        {
+            if (wl_rlp_get_biguint(&rlp[7],tx->r.u8,32) < 0
+                || wl_rlp_get_biguint(&rlp[8],tx->s.u8,32) < 0)
+            {
+                return -1;
+            }
+        }
+        if (wl_eth_tx_parse_chainid(tx,v) < 0)
         {
             return -1;
         }
     }
+
     return 0;
 }
 
