@@ -276,7 +276,7 @@ static int wl_btc_txin_unserialize(buff_t *buf,const char *prevout,struct btc_tx
     }
     if (in->outtype == TX_SCRIPTHASH)
     {
-        wl_script_export(WALLEVE_COINS_LMC,in->address,in->redeem);
+        wl_script_export(WALLEVE_COINS_BTC,in->address,in->redeem);
     }
     return 0;
 }
@@ -610,7 +610,7 @@ static inline int wl_btc_sign_txin_pubkey(struct btc_tx_input* in,uint256_t hash
     {
         return -1;
     }
-    if (wl_key_sign(WALLEVE_COINS_LMC,addr,hash.u8,sig) < 0
+    if (wl_key_sign(WALLEVE_COINS_BTC,addr,hash.u8,sig) < 0
         || wl_vch_push_uchar(sig,SIGHASH_ALL) < 0
         || wl_sato_script_push_data(in->script_sig,sig) < 0)
     {
@@ -629,7 +629,7 @@ static inline int wl_btc_sign_txin_pubkeyhash(struct btc_tx_input* in,uint256_t 
         return -1;
     }
     if ((pkdata = wl_vch_new()) == NULL 
-        || wl_key_pkdata(WALLEVE_COINS_LMC,addr,pkdata) < 0
+        || wl_key_pkdata(WALLEVE_COINS_BTC,addr,pkdata) < 0
         || wl_sato_script_push_data(in->script_sig,pkdata) < 0)
     {
         wl_vch_free(pkdata);
@@ -669,7 +669,7 @@ static inline int wl_btc_sign_txin_multisig(struct btc_tx_input* in,uint256_t ha
             char addr[36];
             if (wl_sato_pubkey_address(PUBKEY_PREFIX,multisig->pubkeys[i],
                                                      multisig->size[i],addr,36) == 0
-                && wl_key_sign(WALLEVE_COINS_LMC,addr,hash.u8,sig[i]) == 0
+                && wl_key_sign(WALLEVE_COINS_BTC,addr,hash.u8,sig[i]) == 0
                 && wl_vch_push_uchar(sig[i],SIGHASH_ALL) == 0)
             {
                 mysigned++;
