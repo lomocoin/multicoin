@@ -514,7 +514,7 @@ static int wl_lmc_txin_serialize(buff_t* buf,struct lmc_tx_input *in,vch_t *scri
     {
         return -1;
     }
-    if (wl_buff_push32(buf,(script != NULL ? in->seq : 0)) < 0)
+    if (wl_buff_push32(buf,in->seq) < 0)
     {
         return -1;
     }
