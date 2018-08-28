@@ -138,7 +138,7 @@ int wl_secp_verify_signature(void *pubkey,int compress,void *md32,void *sig,size
 int wl_secp_eth_sign_signature(void *secret,const void *md32,vch_t *sig)
 {
     int v = 0;
-    uint256_t u;
+    // uint256_t u;
 
     secp256k1_ecdsa_recoverable_signature s;
     if (!secp256k1_ecdsa_sign_recoverable(_ctx,&s,md32,secret,NULL,NULL))
@@ -151,12 +151,12 @@ int wl_secp_eth_sign_signature(void *secret,const void *md32,vch_t *sig)
     }
     secp256k1_ecdsa_recoverable_signature_serialize_compact(_ctx,wl_vch_data(sig),&v,&s);
 
-    u = ((uint256_t *)wl_vch_data(sig))[1];
-    if (wl_uint256_compare(u,_secp256k1n_rs) > 0)
-    {
-        ((uint256_t *)wl_vch_data(sig))[1] = wl_uint256_minus(_secp256k1n,u);
-        v ^= 1;
-    }
+    // u = ((uint256_t *)wl_vch_data(sig))[1];
+    // if (wl_uint256_compare(u,_secp256k1n_rs) > 0)
+    // {
+    //     ((uint256_t *)wl_vch_data(sig))[1] = wl_uint256_minus(_secp256k1n,u);
+    //     v ^= 1;
+    // }
     return wl_vch_push_uchar(sig,v);
 }
 
@@ -208,7 +208,7 @@ static void wl_hash_rmd160(void *data,size_t size,void *md20)
 
 static void wl_hash_sha256(const void *data,size_t size,void *md32)
 {
-    secp256k1_sha256_t hash;
+    secp256k1_sha256 hash;
     secp256k1_sha256_initialize(&hash);
     secp256k1_sha256_write(&hash,data,size);
     secp256k1_sha256_finalize(&hash,md32);

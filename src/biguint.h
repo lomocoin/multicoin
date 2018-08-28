@@ -75,4 +75,5 @@ int wl_uint256_tohex(uint256_t *u,char *hex,size_t size);
 
 int wl_uint160_tohex_compact(uint160_t *u,char *hex,size_t size);
 int wl_uint256_tohex_compact(uint256_t *u,char *hex,size_t size);
+int wl_uintx_tohex(uint8_t *u, size_t len, char *hex, size_t size);
 #endif //WALLEVE_BIGUINT_H
