@@ -10,6 +10,10 @@
 
 int lmc_test();
 int eth_test();
+int eth_test0();
+int btc_test();
+int btc_test1();
+int btc_test2();
 
 void disp_str(char *s)
 {
@@ -201,12 +205,13 @@ int main(int argc,char **argv)
     wl_multicoin_init();
 
     disp_ver();
-   
-    if (!lmc_test())
-    {
-    }
+    // btc_test2();
 
-    if (!eth_test())
+    // if (!lmc_test())
+    // {
+    // }
+
+    if (!eth_test0())
     {
     }
     wl_multicoin_deinit();

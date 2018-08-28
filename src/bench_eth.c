@@ -64,3 +64,86 @@ int eth_test()
     printf("==================== ETH END========================\n\n");
     return 0;
 }
+
+int eth_test0()
+{
+    vch_t *addr = wl_vch_new();
+    vch_t *pubkey  = wl_vch_new();
+    vch_t *json_str = wl_vch_new();
+    char *privkey0 = "816680718cceecedbf5d04b994e3d46c9be6f208629b0209083d3bc246208fa7";
+    char *tx = "{\"data\" : \"c6427474000000000000000000000000afe0be9d8c967cefc87bb9e12a6f3bce4ea15455000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000600000000000000000000000000000000000000000000000000000000000000044a9059cbb000000000000000000000000d4dcb6303b900d08328ab1a52ad54e352c2b8e97000000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000\","
+	                      "\"gas\" : \"2a349\",\"price\" : \"c845880\",\"nonce\" : \"a\","
+                          "\"r\" : \"0\","
+                          "\"s\" : \"0\","
+                          "\"to\" : \"bfe523bfa0b5f2f2676704b2eef455aaf344a1a4\","
+                          "\"v\" : \"0\","
+                          "\"value\" : \"0\"}";
+
+    if (wl_multicoin_key_import(WALLEVE_COINS_ETH,privkey0,addr) < 0)
+    {
+        printf("failed to import key\n");
+        return -1;
+    }
+    printf("addr:%s\n", wl_vch_string(addr));
+
+    if (wl_multicoin_key_pubkey(WALLEVE_COINS_ETH,wl_vch_string(addr),pubkey) < 0)
+    {
+        printf("failed to get pub key\n");
+        return -1;
+    }
+    printf("pubkey:%s\n", wl_vch_string(pubkey));
+
+    char in[200] = {"\0"};
+    sprintf(in, "{\"from\": \"%s\"}", wl_vch_string(addr));
+
+    if (wl_multicoin_tx_parse(WALLEVE_COINS_ETH,tx,in,json_str) < 0)
+    {
+        printf("failed to parse tx\n");
+        wl_vch_free(json_str);
+        return -1;
+    }
+    printf("json:%s\n", wl_vch_string(json_str));
+
+    vch_t *tx_signed = wl_vch_new();
+    if (wl_multicoin_tx_sign(WALLEVE_COINS_ETH,tx,in,tx_signed) < 0)
+    {
+        printf("failed to sign tx\n");
+        wl_vch_free(tx_signed);
+        return -1;
+    }
+    printf(">sign:%s\n", wl_vch_string(tx_signed));
+
+    char tx01[1014] = {'\0'};
+    sprintf(tx01, "{\"hex\": \"%s\"}", wl_vch_string(tx_signed));
+
+    vch_t *json_str1 = wl_vch_new();
+    if (wl_multicoin_tx_verify(WALLEVE_COINS_ETH, tx01,in,json_str1) < 0)
+    {
+        printf("failed to verify tx\n");
+        wl_vch_free(json_str1);
+        return -1;
+    }
+    printf("verify:%s\n", wl_vch_string(json_str1));
+
+    // char tx02[1024] = {'\0'};
+    // char in02[1024] = {'\0'};
+    // sprintf(tx02, "{\"hex\":\"%s\"}", wl_vch_string(tx_signed));
+    // sprintf(in02, "{\"from\":\"%s\"}", wl_vch_string(addr));
+    // vch_t *json_str2 = wl_vch_new();
+    // if (wl_multicoin_tx_parse(WALLEVE_COINS_ETH,tx02,in02,json_str2) < 0)
+    // {
+    //     printf("failed to parse tx\n");
+    //     wl_vch_free(json_str2);
+    //     return -1;
+    // }
+    // printf("end json:%s\n", wl_vch_string(json_str2));
+
+
+    wl_vch_free(json_str);
+    wl_vch_free(tx_signed);
+    wl_vch_free(addr);
+    wl_vch_free(pubkey);
+    wl_vch_free(json_str1);
+
+    return 0;
+}

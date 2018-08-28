@@ -93,7 +93,7 @@ static void wl_eth_tx_init(struct eth_transaction *tx)
 {
     memset(tx,0,sizeof(struct eth_transaction));
 }
-    
+
 static void wl_eth_tx_clear(struct eth_transaction *tx)
 {   
     if (tx->data != NULL)
@@ -178,7 +178,7 @@ static int wl_eth_tx_unserialize(vch_t *vch,struct eth_transaction *tx)
     return 0;
 }
 
-static int wl_eth_tx_serialize(struct eth_transaction *tx,vch_t *vch,int withsig)
+static int wl_eth_tx_serialize1(struct eth_transaction *tx,vch_t *vch,int withsig)
 {
     int ret = -1;
     vch_t *list = wl_vch_new();
@@ -217,6 +217,57 @@ static int wl_eth_tx_serialize(struct eth_transaction *tx,vch_t *vch,int withsig
         {
             wl_vch_free(list);
             return -1;
+        }
+    }
+
+    ret = wl_rlp_put_list(vch,list);
+    wl_vch_free(list);
+    return ret;
+}
+
+static int wl_eth_tx_serialize(struct eth_transaction *tx,vch_t *vch,int withsig)
+{
+    int ret = -1;
+    vch_t *list = wl_vch_new();
+    if (list == NULL)
+    {
+        return -1;
+    }
+
+    wl_vch_clear(vch);
+    if (   wl_rlp_put_biguint(list,tx->nonce.u8,32) < 0
+        || wl_rlp_put_biguint(list,tx->price.u8,32) < 0
+        || wl_rlp_put_biguint(list,tx->gas.u8,32) < 0
+        || wl_rlp_put_biguint(list,tx->to.u8,20) < 0
+        || wl_rlp_put_biguint(list,tx->value.u8,32) < 0
+        || wl_rlp_put_data(list,wl_vch_data(tx->data),wl_vch_len(tx->data)) < 0)
+    {
+        wl_vch_free(list);
+        return -1;
+    }
+
+    if (withsig)
+    {
+        // uint8_t v = tx->v + (tx->chainid * 2 + 35);
+        uint8_t v = tx->v + 27;
+        if (   wl_rlp_put_uint(list,v) < 0
+            || wl_rlp_put_biguint(list,tx->r.u8,32) < 0
+            || wl_rlp_put_biguint(list,tx->s.u8,32) < 0)
+        {
+            wl_vch_free(list);
+            return -1;
+        }
+    }
+    else
+    {
+        if(tx->chainid > 0)
+        {
+            if (wl_rlp_put_uint(list, tx->chainid * 2 + 8) < 0 || wl_rlp_put_uint(list, 0) < 0 
+            || wl_rlp_put_uint(list, 0) < 0)
+            {
+                wl_vch_free(list);
+                return -1;
+            }
         }
     }
 

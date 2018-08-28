@@ -85,3 +85,8 @@ int wl_uint256_tohex_compact(uint256_t *u,char *hex,size_t size)
     }
     return wl_uint_tohex(p,32 - (p - u->u8),hex,size);
 }
+
+int wl_uintx_tohex(uint8_t *u, size_t len, char *hex, size_t size)
+{
+    return wl_uint_tohex(u, len, hex, size);
+}
